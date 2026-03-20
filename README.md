@@ -13,7 +13,7 @@ Full-stack starter website for a car dealer with:
 
 ## Setup
 
-From `c:\Users\Haashim\Documents\akmotors`:
+
 
 ```powershell
 npm install
