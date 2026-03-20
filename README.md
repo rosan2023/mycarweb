@@ -35,7 +35,7 @@ $env:SESSION_SECRET="another-strong-secret"
 npm run dev
 ```
 
-If you do not set `ADMIN_PASSWORD`, the default is `admin123` (change it!).
+
 
 ## Uploading car images
 
