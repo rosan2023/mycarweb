@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node --watch src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "vercel-start": "node src/server.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.3.0",
