@@ -1,0 +1,45 @@
+<%- include("../partials/head", { title: "Admin · Settings" }) %>
+<%- include("../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0">Settings</h2>
+      <p class="muted" style="margin:6px 0 0 0">Update your company contact information.</p>
+    </div>
+    <div class="row">
+      <a class="btn" href="/admin">Dashboard</a>
+      <a class="btn" href="/contact">View public contact page</a>
+    </div>
+  </div>
+
+  <section class="form" style="margin-top:12px; max-width:720px">
+    <%- include("../partials/errors", { errors }) %>
+    <form method="post" action="/admin/settings">
+      <label>Company name</label>
+      <input name="company.name" value="<%= values['company.name'] || '' %>" required />
+
+      <label>Phone</label>
+      <input name="company.phone" value="<%= values['company.phone'] || '' %>" required />
+
+      <label>Email</label>
+      <input name="company.email" value="<%= values['company.email'] || '' %>" required />
+
+      <label>Address</label>
+      <textarea name="company.address" required><%= values['company.address'] || '' %></textarea>
+
+      <label>Currency code (3 letters)</label>
+      <input name="company.currency_code" value="<%= values['company.currency_code'] || 'HKD' %>" required />
+
+      <label>Currency symbol</label>
+      <input name="company.currency_symbol" value="<%= values['company.currency_symbol'] || 'HK$' %>" required />
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn primary" type="submit">Save settings</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>
+

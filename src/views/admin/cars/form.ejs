@@ -1,0 +1,112 @@
+<%- include("../../partials/head", { title: car ? "Admin · Edit car" : "Admin · Add car" }) %>
+<%- include("../../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0"><%= car ? "Edit car" : "Add car" %></h2>
+      <p class="muted" style="margin:6px 0 0 0">Fill in the car details.</p>
+    </div>
+    <div class="row">
+      <a class="btn" href="/admin/cars">Back to cars</a>
+    </div>
+  </div>
+
+  <section class="form" style="margin-top:12px">
+    <%- include("../../partials/errors", { errors }) %>
+    <form method="post" action="<%= car ? `/admin/cars/${car.id}` : '/admin/cars' %>">
+      <div class="grid" style="grid-template-columns: 1fr 1fr; gap:12px">
+        <div>
+          <label>Title</label>
+          <input name="title" value="<%= values.title || '' %>" placeholder="e.g. Toyota Corolla 2018" required />
+        </div>
+        <div>
+          <label>Status</label>
+          <select name="status" <%= car ? '' : 'disabled' %>>
+            <option value="AVAILABLE" <%= String(values.status || 'AVAILABLE') === 'AVAILABLE' ? 'selected' : '' %>>AVAILABLE</option>
+            <option value="SOLD" <%= String(values.status || '') === 'SOLD' ? 'selected' : '' %>>SOLD</option>
+          </select>
+          <% if (!car) { %>
+            <div class="muted" style="font-size:12px; margin-top:6px">New cars start as AVAILABLE.</div>
+          <% } %>
+        </div>
+        <div>
+          <label>Make</label>
+          <input name="make" value="<%= values.make || '' %>" required />
+        </div>
+        <div>
+          <label>Model</label>
+          <input name="model" value="<%= values.model || '' %>" required />
+        </div>
+        <div>
+          <label>Year</label>
+          <input name="year" value="<%= values.year || '' %>" inputmode="numeric" required />
+        </div>
+        <div>
+          <label>Price</label>
+          <input name="price" value="<%= values.price || '' %>" inputmode="numeric" required />
+        </div>
+        <div>
+          <label>Mileage (optional)</label>
+          <input name="mileage" value="<%= values.mileage || '' %>" inputmode="numeric" />
+        </div>
+        <div>
+          <label>Transmission (optional)</label>
+          <input name="transmission" value="<%= values.transmission || '' %>" placeholder="Automatic / Manual" />
+        </div>
+        <div>
+          <label>Fuel (optional)</label>
+          <input name="fuel" value="<%= values.fuel || '' %>" placeholder="Petrol / Diesel / Hybrid" />
+        </div>
+        <div>
+          <label>Color (optional)</label>
+          <input name="color" value="<%= values.color || '' %>" />
+        </div>
+      </div>
+
+      <label>Description (optional)</label>
+      <textarea name="description" placeholder="Key features, condition, notes..."><%= values.description || '' %></textarea>
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn primary" type="submit">Save</button>
+        <a class="btn" href="/admin/cars">Cancel</a>
+      </div>
+    </form>
+  </section>
+
+  <% if (car) { %>
+    <section class="card" style="margin-top:14px">
+      <div class="row" style="justify-content:space-between; align-items:center">
+        <h3 style="margin:0">Images</h3>
+        <span class="muted" style="font-size:12px">Upload up to 10 images, max 8MB each.</span>
+      </div>
+
+      <form class="form" style="margin-top:10px" method="post" action="/admin/cars/<%= car.id %>/images" enctype="multipart/form-data">
+        <label>Select images</label>
+        <input type="file" name="images" accept="image/*" multiple />
+        <div class="row" style="margin-top:12px">
+          <button class="btn ok" type="submit">Upload</button>
+        </div>
+      </form>
+
+      <div class="grid" style="grid-template-columns: repeat(4, minmax(0,1fr)); gap:10px; margin-top:12px">
+        <% if (!images || !images.length) { %>
+          <div class="muted" style="grid-column: 1/-1">No images yet.</div>
+        <% } %>
+        <% (images || []).forEach((img) => { %>
+          <div class="card" style="padding:10px; background:rgba(255,255,255,.03)">
+            <a href="/uploads/<%= img.filename %>" target="_blank" rel="noreferrer">
+              <img src="/uploads/<%= img.filename %>" alt="Car image" style="width:100%; height:130px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,.10)" />
+            </a>
+            <form method="post" action="/admin/cars/<%= car.id %>/images/<%= img.id %>/delete" style="margin-top:8px" onsubmit="return confirm('Delete this image?');">
+              <button class="btn danger" type="submit" style="width:100%">Delete</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+    </section>
+  <% } %>
+</main>
+
+<%- include("../../partials/footer") %>
+

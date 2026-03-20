@@ -1,0 +1,24 @@
+<%- include("../partials/head", { title: "Admin login" }) %>
+<%- include("../partials/nav") %>
+
+<main class="container">
+  <section class="form" style="max-width:520px; margin:0 auto">
+    <h2 style="margin:0 0 8px 0">Admin login</h2>
+    <p class="muted" style="margin:0 0 10px 0">Enter the admin password to access the dashboard.</p>
+
+    <%- include("../partials/errors", { errors }) %>
+
+    <form method="post" action="/admin/login">
+      <input type="hidden" name="next" value="<%= next || '/admin' %>" />
+      <label>Password</label>
+      <input type="password" name="password" required autofocus />
+      <div class="row" style="margin-top:12px">
+        <button class="btn primary" type="submit">Login</button>
+        <a class="btn" href="/">Back</a>
+      </div>
+    </form>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>
+

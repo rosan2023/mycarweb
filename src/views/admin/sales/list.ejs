@@ -1,0 +1,77 @@
+<%- include("../../partials/head", { title: "Admin · Sales" }) %>
+<%- include("../../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0">Sales</h2>
+      <p class="muted" style="margin:6px 0 0 0">Record sold cars and track revenue.</p>
+    </div>
+    <div class="row">
+      <a class="btn" href="/admin/reports/monthly">Monthly report</a>
+    </div>
+  </div>
+
+  <section class="grid" style="grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px">
+    <div class="form">
+      <h3 style="margin:0 0 10px 0">Record a sale</h3>
+      <%- include("../../partials/errors", { errors }) %>
+      <form method="post" action="/admin/sales">
+        <label>Car</label>
+        <select name="car_id" required>
+          <option value="">—</option>
+          <% cars.forEach((c) => { %>
+            <option value="<%= c.id %>" <%= String(values.car_id || '') === String(c.id) ? 'selected' : '' %>>
+              <%= c.title %> (<%= c.make %> <%= c.model %> <%= c.year %>) - <%= c.status %>
+            </option>
+          <% }) %>
+        </select>
+        <label>Sold price</label>
+        <input name="sold_price" value="<%= values.sold_price || '' %>" inputmode="numeric" required />
+        <label>Sold date (optional, YYYY-MM-DD)</label>
+        <input name="sold_at" value="<%= values.sold_at || '' %>" placeholder="<%= dayjs().format('YYYY-MM-DD') %>" />
+        <label>Buyer name (optional)</label>
+        <input name="buyer_name" value="<%= values.buyer_name || '' %>" />
+        <label>Notes (optional)</label>
+        <textarea name="notes"><%= values.notes || '' %></textarea>
+        <div class="row" style="margin-top:12px">
+          <button class="btn ok" type="submit">Save sale</button>
+        </div>
+      </form>
+      <p class="muted" style="margin-top:10px; font-size:12px">Saving a sale automatically marks the car as SOLD.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Recent sales</h3>
+      <div style="overflow:auto; margin-top:10px">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Car</th>
+              <th>Sold at</th>
+              <th>Sold price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (!sales.length) { %>
+              <tr><td colspan="3" class="muted">No sales recorded yet.</td></tr>
+            <% } %>
+            <% sales.slice(0, 15).forEach((s) => { %>
+              <tr>
+                <td>
+                  <strong><%= s.car_title %></strong>
+                  <div class="muted"><%= s.make %> · <%= s.model %> · <%= s.year %></div>
+                </td>
+                <td class="muted"><%= dayjs(s.sold_at).format("YYYY-MM-DD") %></td>
+                <td><strong><%= settings && settings['company.currency_symbol'] ? `${settings['company.currency_symbol']} ${Number(s.sold_price).toLocaleString()}` : Number(s.sold_price).toLocaleString() %></strong></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>
+

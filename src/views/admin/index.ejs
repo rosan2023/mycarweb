@@ -1,0 +1,67 @@
+<%- include("../partials/head", { title: "Admin" }) %>
+<%- include("../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0">Admin dashboard</h2>
+      <p class="muted" style="margin:6px 0 0 0">Manage cars, view messages, record sales, and run monthly reports.</p>
+    </div>
+    <div class="row">
+      <a class="btn" href="/admin/cars">Cars</a>
+      <a class="btn" href="/admin/messages">Messages</a>
+      <a class="btn" href="/admin/sales">Sales</a>
+      <a class="btn" href="/admin/reports/monthly">Monthly report</a>
+      <a class="btn" href="/admin/settings">Settings</a>
+    </div>
+  </div>
+
+  <div class="grid cards" style="margin-top:14px">
+    <div class="card">
+      <h3>Cars</h3>
+      <div class="row" style="margin-top:10px">
+        <span class="badge"><%= counts.cars %> total</span>
+        <span class="badge ok"><%= counts.available %> available</span>
+        <span class="badge warn"><%= counts.sold %> sold</span>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <a class="btn primary" href="/admin/cars/new">Add car</a>
+        <a class="btn" href="/admin/cars">Manage</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Messages</h3>
+      <div class="row" style="margin-top:10px">
+        <span class="badge"><%= counts.messages %> total</span>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <a class="btn primary" href="/admin/messages">View messages</a>
+        <a class="btn" href="/contact">Public contact page</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Sales</h3>
+      <div class="row" style="margin-top:10px">
+        <span class="badge"><%= counts.sales %> recorded</span>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <a class="btn ok" href="/admin/sales">Record sale</a>
+        <a class="btn" href="/admin/reports/monthly">Monthly report</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Settings</h3>
+      <p class="muted" style="margin:6px 0 0 0">Update phone, email, address, and company name.</p>
+      <div class="row" style="margin-top:12px">
+        <a class="btn primary" href="/admin/settings">Edit settings</a>
+        <a class="btn" href="/contact">View contact page</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
+

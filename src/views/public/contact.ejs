@@ -1,0 +1,63 @@
+<%- include("../partials/head", { title: "Contact" }) %>
+<%- include("../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0">Contact</h2>
+      <p class="muted" style="margin:6px 0 0 0">Send us a message and we’ll reply.</p>
+    </div>
+    <a class="btn" href="/admin/messages">View messages</a>
+  </div>
+
+  <div class="grid" style="grid-template-columns: 1fr 1fr; gap:14px; margin-top:14px">
+    <section class="form">
+      <h3 style="margin:0 0 10px 0">Send message</h3>
+      <%- include("../partials/errors", { errors }) %>
+      <form method="post" action="/contact">
+        <label>Name</label>
+        <input name="name" value="<%= values.name || '' %>" required />
+        <label>Email</label>
+        <input name="email" value="<%= values.email || '' %>" required />
+        <label>Phone (optional)</label>
+        <input name="phone" value="<%= values.phone || '' %>" />
+        <label>Car (optional)</label>
+        <select name="car_id">
+          <option value="">—</option>
+          <% cars.forEach((c) => { %>
+            <option value="<%= c.id %>" <%= String(values.car_id || '') === String(c.id) ? 'selected' : '' %>>
+              <%= c.title %> (<%= c.make %> <%= c.model %> <%= c.year %>)
+            </option>
+          <% }) %>
+        </select>
+        <label>Message</label>
+        <textarea name="message" required><%= values.message || '' %></textarea>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" type="submit">Send</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h3 style="margin-top:0">Contact details</h3>
+      <p class="muted">These details are editable in Admin → Settings.</p>
+      <div class="grid" style="grid-template-columns:1fr; gap:10px">
+        <div class="card" style="background:rgba(255,255,255,.03)">
+          <div class="muted">Phone</div>
+          <div><%= (settings && settings['company.phone']) ? settings['company.phone'] : '—' %></div>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,.03)">
+          <div class="muted">Email</div>
+          <div><%= (settings && settings['company.email']) ? settings['company.email'] : '—' %></div>
+        </div>
+        <div class="card" style="background:rgba(255,255,255,.03)">
+          <div class="muted">Location</div>
+          <div style="white-space:pre-wrap"><%= (settings && settings['company.address']) ? settings['company.address'] : '—' %></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
+

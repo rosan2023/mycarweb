@@ -1,0 +1,61 @@
+<%- include("../../partials/head", { title: "Admin · Monthly report" }) %>
+<%- include("../../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0">Monthly report</h2>
+      <p class="muted" style="margin:6px 0 0 0">Sales and revenue for the selected month.</p>
+    </div>
+    <div class="row">
+      <a class="btn" href="/admin/sales">Sales</a>
+    </div>
+  </div>
+
+  <section class="form" style="margin-top:12px">
+    <form method="get" action="/admin/reports/monthly">
+      <label>Month (YYYY-MM)</label>
+      <div class="row">
+        <input name="month" value="<%= month %>" placeholder="<%= dayjs().format('YYYY-MM') %>" />
+        <button class="btn primary" type="submit">Run</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card" style="margin-top:12px">
+    <div class="row" style="justify-content:space-between; align-items:center">
+      <h3 style="margin:0">Results for <%= month %></h3>
+      <span class="badge ok">Total revenue: <%= settings && settings['company.currency_symbol'] ? `${settings['company.currency_symbol']} ${Number(total).toLocaleString()}` : Number(total).toLocaleString() %></span>
+    </div>
+
+    <div style="overflow:auto; margin-top:10px">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Car</th>
+            <th>Sold price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!rows.length) { %>
+            <tr><td colspan="3" class="muted">No sales found for this month.</td></tr>
+          <% } %>
+          <% rows.forEach((r) => { %>
+            <tr>
+              <td class="muted"><%= dayjs(r.sold_at).format("YYYY-MM-DD") %></td>
+              <td>
+                <strong><%= r.title %></strong>
+                <div class="muted"><%= r.make %> · <%= r.model %> · <%= r.year %></div>
+              </td>
+              <td><strong><%= settings && settings['company.currency_symbol'] ? `${settings['company.currency_symbol']} ${Number(r.sold_price).toLocaleString()}` : Number(r.sold_price).toLocaleString() %></strong></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<%- include("../../partials/footer") %>
+

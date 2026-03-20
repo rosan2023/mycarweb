@@ -1,0 +1,67 @@
+<%- include("../partials/head", { title: "Inventory" }) %>
+<%- include("../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0">Inventory</h2>
+      <p class="muted" style="margin:6px 0 0 0">All cars (available and sold)</p>
+    </div>
+    <a class="btn" href="/admin/cars">Manage cars</a>
+  </div>
+
+  <div style="margin-top:12px">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Car</th>
+          <th>Price</th>
+          <th>Mileage</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!cars.length) { %>
+          <tr><td colspan="4" class="muted">No cars yet.</td></tr>
+        <% } %>
+        <% cars.forEach((c) => { %>
+          <tr>
+            <td>
+              <div class="row" style="gap:12px; align-items:flex-start">
+                <a href="/cars/<%= c.id %>" style="display:inline-block">
+                  <% if (c.cover_image) { %>
+                    <img
+                      src="/uploads/<%= c.cover_image %>"
+                      alt="Car photo"
+                      style="width:92px; height:62px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.10)"
+                    />
+                  <% } else { %>
+                    <div class="card" style="width:92px; height:62px; padding:10px; background:rgba(255,255,255,.03); border-style:dashed">
+                      <div class="muted" style="font-size:11px">No image</div>
+                    </div>
+                  <% } %>
+                </a>
+                <div>
+                  <a class="pill" href="/cars/<%= c.id %>"><%= c.title %></a>
+                  <div class="muted"><%= c.make %> · <%= c.model %> · <%= c.year %></div>
+                </div>
+              </div>
+            </td>
+            <td><strong><%= settings && settings['company.currency_symbol'] ? `${settings['company.currency_symbol']} ${Number(c.price).toLocaleString()}` : Number(c.price).toLocaleString() %></strong></td>
+            <td class="muted"><%= c.mileage ? `${c.mileage.toLocaleString()} km` : "—" %></td>
+            <td>
+              <% if (c.status === "AVAILABLE") { %>
+                <span class="badge ok">Available</span>
+              <% } else { %>
+                <span class="badge warn">Sold</span>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<%- include("../partials/footer") %>
+

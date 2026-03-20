@@ -1,0 +1,68 @@
+<%- include("../partials/head", { title: "Home" }) %>
+<%- include("../partials/nav") %>
+
+<main class="container">
+  <section class="hero">
+    <div>
+      <h1>Find your next car.</h1>
+      <p>
+        Browse our latest inventory. If you have questions, send us a message and we’ll get back to you quickly.
+      </p>
+      <div class="row" style="margin-top:14px">
+        <a class="btn primary" href="/cars">Browse inventory</a>
+        <a class="btn" href="/contact">Contact</a>
+        <a class="btn" href="/admin">Admin dashboard</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Quick stats</h3>
+      <p class="muted" style="margin:0">Available cars shown below.</p>
+      <div class="row" style="margin-top:10px">
+        <span class="badge ok"><%= cars.length %> available</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top:18px">
+    <div class="row" style="justify-content:space-between; align-items:flex-end">
+      <h2 style="margin:0">Latest available cars</h2>
+      <a class="pill" href="/cars">View all</a>
+    </div>
+
+    <div class="grid cards" style="margin-top:12px">
+      <% if (!cars.length) { %>
+        <div class="card" style="grid-column: 1/-1">
+          <h3>No cars yet</h3>
+          <p class="muted">Go to Admin → Cars to add your first car listing.</p>
+        </div>
+      <% } %>
+
+      <% cars.forEach((c) => { %>
+        <a class="card" href="/cars/<%= c.id %>">
+          <% if (c.cover_image) { %>
+            <img
+              src="/uploads/<%= c.cover_image %>"
+              alt="Car photo"
+              style="width:100%; height:170px; object-fit:cover; border-radius:12px; border:1px solid rgba(255,255,255,.10); margin-bottom:10px"
+            />
+          <% } else { %>
+            <div class="card" style="padding:12px; background:rgba(255,255,255,.03); border-style:dashed; margin-bottom:10px">
+              <div class="muted" style="font-size:12px">No image yet</div>
+            </div>
+          <% } %>
+          <div class="row" style="justify-content:space-between">
+            <h3><%= c.title %></h3>
+            <span class="badge ok">Available</span>
+          </div>
+          <div class="muted"><%= c.make %> · <%= c.model %> · <%= c.year %></div>
+          <div class="row" style="margin-top:10px; justify-content:space-between">
+            <div><strong>Price:</strong> <%= settings && settings['company.currency_symbol'] ? `${settings['company.currency_symbol']} ${Number(c.price).toLocaleString()}` : Number(c.price).toLocaleString() %></div>
+            <div class="muted"><%= c.mileage ? `${c.mileage.toLocaleString()} km` : "—" %></div>
+          </div>
+        </a>
+      <% }) %>
+    </div>
+  </section>
+</main>
+
+<%- include("../partials/footer") %>

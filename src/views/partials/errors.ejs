@@ -1,0 +1,10 @@
+<% if (errors && errors.length) { %>
+  <div class="errors">
+    <strong>Please fix:</strong>
+    <ul>
+      <% errors.forEach((e) => { %>
+        <li><%= e.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>

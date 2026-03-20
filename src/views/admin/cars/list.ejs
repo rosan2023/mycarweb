@@ -1,0 +1,62 @@
+<%- include("../../partials/head", { title: "Admin · Cars" }) %>
+<%- include("../../partials/nav") %>
+
+<main class="container">
+  <div class="row" style="justify-content:space-between; align-items:flex-end">
+    <div>
+      <h2 style="margin:0">Cars</h2>
+      <p class="muted" style="margin:6px 0 0 0">Create, update, and delete car listings.</p>
+    </div>
+    <div class="row">
+      <a class="btn primary" href="/admin/cars/new">Add car</a>
+      <a class="btn" href="/cars">View public inventory</a>
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Car</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (!cars.length) { %>
+          <tr><td colspan="4" class="muted">No cars yet. Click “Add car”.</td></tr>
+        <% } %>
+        <% cars.forEach((c) => { %>
+          <tr>
+            <td>
+              <strong><%= c.title %></strong>
+              <div class="muted"><%= c.make %> · <%= c.model %> · <%= c.year %></div>
+              <div class="muted" style="font-size:12px">Added: <%= c.created_at %></div>
+            </td>
+            <td><%= settings && settings['company.currency_symbol'] ? `${settings['company.currency_symbol']} ${Number(c.price).toLocaleString()}` : Number(c.price).toLocaleString() %></td>
+            <td>
+              <% if (c.status === "AVAILABLE") { %>
+                <span class="badge ok">AVAILABLE</span>
+              <% } else { %>
+                <span class="badge warn">SOLD</span>
+              <% } %>
+            </td>
+            <td>
+              <div class="row">
+                <a class="btn" href="/admin/cars/<%= c.id %>/edit">Edit</a>
+                <form method="post" action="/admin/cars/<%= c.id %>/delete" onsubmit="return confirm('Delete this car?');">
+                  <button class="btn danger" type="submit">Delete</button>
+                </form>
+                <a class="btn" href="/cars/<%= c.id %>">Public</a>
+              </div>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<%- include("../../partials/footer") %>
+
